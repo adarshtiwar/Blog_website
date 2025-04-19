@@ -3,7 +3,7 @@ import { StoreContext } from '../context/StoreContext';
 import BlogCard from './BlogCard';
 
 const LatestBlog = () => {
-  const { blogData } = useContext(StoreContext); // ✅ Correct usage inside component
+  const { blogData } = useContext(StoreContext); 
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
