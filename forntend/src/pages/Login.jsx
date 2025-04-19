@@ -1,54 +1,94 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // For navigating to the signup page
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { StoreContext } from "../context/StoreContext";
+import { motion } from "framer-motion";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (e) => {
+  const { loginUser } = useContext(StoreContext);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const onChangeHandler = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login details:', { email, password });
+    try {
+      setLoading(true);
+      const res = await axios.post("http://localhost:3000/user/login", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.data.success) {
+        const { user, token } = res.data;
+        loginUser(user, token);
+        toast.success(res.data.message);
+        navigate("/");
+      } else {
+        toast.error(res.data.message || "Login failed");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-400 to-blue-500">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-2xl">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex flex-col">
-            <label htmlFor="email" className="text-sm font-medium text-gray-600 mb-1">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="password" className="text-sm font-medium text-gray-600 mb-1">Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
-            />
-          </div>
-          <button type="submit" className="w-full bg-teal-500 text-white py-2 rounded-lg hover:bg-teal-600 transition duration-300">
-            Log In
+    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="bg-white max-w-md w-full p-8 rounded-2xl shadow-lg border border-orange-200"
+      >
+        <h1 className="text-2xl font-bold text-center text-orange-700 mb-6">
+          Login to your account 🔐
+        </h1>
+        <form onSubmit={submitHandler} className="flex flex-col gap-4">
+          <input
+            name="email"
+            value={formData.email}
+            onChange={onChangeHandler}
+            type="email"
+            placeholder="Your email"
+            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition duration-200"
+            required
+          />
+          <input
+            name="password"
+            value={formData.password}
+            onChange={onChangeHandler}
+            type="password"
+            placeholder="Your password"
+            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition duration-200"
+            required
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-teal-500 hover:underline">
-            Sign up
+        <p className="text-center mt-5 text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-orange-600 hover:underline font-medium">
+            Register here
           </Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };

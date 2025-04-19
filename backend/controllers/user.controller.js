@@ -7,7 +7,6 @@ dotenv.config();
 
 export const register = async (req, res) => {
   try {
-  
     if (!process.env.JWT_SECRET) {
       throw new Error("JWT_SECRET is not defined in environment variables");
     }
@@ -15,17 +14,21 @@ export const register = async (req, res) => {
     const image_filename = req.file ? req.file.filename : null;
     const { name, email, password } = req.body;
 
+    // Check for required fields
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
+      return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
+    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ success: false, message: 'User already exists' });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create new user
     const newUser = await User.create({
       name,
       email,
@@ -33,9 +36,13 @@ export const register = async (req, res) => {
       image: image_filename,
     });
 
+    // Create token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
-    res.status(201).json({
+    // Send success response with token and user data
+    return res.status(201).json({
+      success: true,  // Added success field
+      message: 'Account created successfully!',  // Message to show on success
       token,
       user: {
         id: newUser._id,
@@ -46,7 +53,7 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("Register Error:", error.message);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ success: false, message: 'Internal server error' });  // Added success field for failure
   }
 };
 

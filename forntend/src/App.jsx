@@ -10,6 +10,7 @@ import Navbar from './componets/Navbar'
 
 import './App.css'
 import Footer from './componets/Footer'
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -25,7 +26,9 @@ function App() {
       <Route path="/register" element={<Signup />} />
       <Route path="/blog/:id" element={<SingleBlog />} />
     </Routes>
+    
 <Footer/>
+<ToastContainer/>
     </>
   )
 }

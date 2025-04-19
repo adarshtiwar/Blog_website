@@ -12,7 +12,7 @@ export const isAuth = async (req, res, next) => {
     return res.status(402).json({ message: "unauthorized" });
   }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SCERECT);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decoded.id).select("-password");
     if (!req.user) {
       return res.status(401).json({ message: "user not found" });
