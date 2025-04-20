@@ -6,6 +6,7 @@ import Blog from './pages/Blog'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import SingleBlog from './pages/SingleBlog'
+import Dashboard from './pages/Dashboard'
 import Navbar from './componets/Navbar'
 
 import './App.css'
@@ -24,6 +25,7 @@ function App() {
       <Route path="/blogs" element={<Blog />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Signup />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/blog/:id" element={<SingleBlog />} />
     </Routes>
     
