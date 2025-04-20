@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 import { motion } from "framer-motion";
+import BASE_URL from "../config"; // Importing the base URL for API requests
 
 const SingleBlog = () => {
   const { id } = useParams();
@@ -26,7 +27,7 @@ const SingleBlog = () => {
       className="rounded-2xl shadow-lg border border-gray-200 p-6 max-w-4xl mx-auto my-10 bg-white"
     >
       <motion.img
-        src={`http://localhost:3000/image/${blog.image}`}
+        src={`${BASE_URL}/image/${blog.image}`}
         alt={blog.title}
         className="w-full rounded-xl object-cover h-90 mb-8"
         style={{ objectFit: "cover"  , height: "300px" }}
@@ -44,7 +45,7 @@ const SingleBlog = () => {
         <div className="flex flex-col items-start justify-start mt-4 lg:mt-0 lg:w-1/4">
           <div className="flex items-center gap-3 mb-4">
             <img
-              src={`http://localhost:3000/image/${blog.author.image}`}
+              src={`${BASE_URL}/image/${blog.author.image}`}
               alt={blog.author.name}
               className="w-12 h-12 rounded-full object-cover shadow-sm"
             />

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import BASE_URL from '../config'
 
 const BlogCard = ({
   id,
@@ -14,7 +15,7 @@ const BlogCard = ({
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">
       <Link to={`/blog/${id}`}>
         <img
-          src={`http://localhost:3000/image/${image}`}
+          src={`${BASE_URL}/image/${image}`}
           alt={title}
           className="w-full h-52 object-cover hover:scale-105 transition-transform duration-500"
         />
@@ -33,7 +34,7 @@ const BlogCard = ({
 
         <div className="flex items-center gap-3 mt-4">
           <img
-            src={`http://localhost:3000/image/${author_image}`}
+            src={`${BASE_URL}/image/${author_image}`}
             alt={author_name}
             className="w-10 h-10 rounded-full object-cover"
           />

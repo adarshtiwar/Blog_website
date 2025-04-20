@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { StoreContext } from "../context/StoreContext";
 import { motion } from "framer-motion";
+import BASE_URL from "../config";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3000/user/login", formData, {
+      const res = await axios.post(`${BASE_URL}/user/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },

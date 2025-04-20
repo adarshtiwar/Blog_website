@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import BASE_URL from "../config"; // Importing the base URL for API requests
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -37,7 +38,7 @@ const Signup = () => {
       setLoading(true);
 
       // Send POST request to the backend to create the user
-      const res = await axios.post("http://localhost:3000/user/register", data, {
+      const res = await axios.post(`${BASE_URL}/user/register`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

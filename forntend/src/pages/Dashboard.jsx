@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import BASE_URL from "../config";
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("list");
   const token = localStorage.getItem("token");
@@ -34,7 +35,7 @@ const Dashboard = () => {
     data.append("image", formData.image);
 
     try {
-      const res = await axios.post("http://localhost:3000/blog/create", data, {
+      const res = await axios.post(`${BASE_URL}/blog/create`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -50,7 +51,7 @@ const Dashboard = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/blog/all", {
+      const res = await axios.get(`${BASE_URL}/blog/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +65,7 @@ const Dashboard = () => {
   const removeBlog = async (blogId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/blog/delete/${blogId}`,
+        `${BASE_URL}/blog/delete/${blogId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,7 +73,7 @@ const Dashboard = () => {
         }
       );
       toast.success(res.data.message);
-      navigate("http://localhost:5173/dashboard"); // Redirect to the /blog page after deleting a blog
+      navigate(`${BASE_URL}/dashboard`); // Redirect to the /blog page after deleting a blog
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -167,7 +168,7 @@ const Dashboard = () => {
                   >
                     <Link to={`/blog/${blog._id}`}>
   <img
-    src={`http://localhost:3000/image/${blog.image}`}
+    src={`${BASE_URL}/image/${blog.image}`}
     alt={blog.title}
     className="w-full h-40 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition"
   />

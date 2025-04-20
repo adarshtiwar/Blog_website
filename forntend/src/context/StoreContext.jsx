@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios, { all } from "axios";
+import BASE_URL from "../config";
 
 export const StoreContext = createContext(null); 
 
@@ -16,7 +17,7 @@ const StoreContextProvider = ({ children }) => {
 useEffect (() => {
   const allBlogs = async () => {
     try {
-      const res= await axios.get("http://localhost:3000/blog/all")
+      const res = await axios.get(`${BASE_URL}/blog/all`);
 if(res.data.success){
   setBlogData(res.data.blogs)
 }
@@ -24,7 +25,7 @@ if(res.data.success){
       
     } catch (error) {
       console.error("Error fetching blogs:", error);
-      
+       
     }
     
   }
